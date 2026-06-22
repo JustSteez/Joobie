@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JOOBI — the blue faces that broke the internet</title>
+<meta name="description" content="JOOBI: 187 hand-drawn blue emoji, born in 2009, still drawn by one artist. Now on TON." />
+<meta name="theme-color" content="#04070E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#04070E;
+    --black:#000000;
+    --panel:#0A1322;
+    --panel-2:#0E1C32;
+    --blue:#2E9BF0;
+    --blue-bright:#56B4FF;
+    --blue-deep:#0B5FB0;
+    --line:rgba(46,155,240,.32);
+    --line-soft:rgba(46,155,240,.18);
+    --text:#EAF4FF;
+    --muted:rgba(234,244,255,.60);
+    --shadow:8px 8px 0 rgba(46,155,240,.22);
+    --shadow-sm:5px 5px 0 rgba(46,155,240,.22);
+    --glow:0 0 40px rgba(46,155,240,.30);
+    --ring:0 0 0 4px rgba(46,155,240,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    color:var(--text);
+    background:var(--bg);
+    background-image:radial-gradient(circle at 14% 12%, rgba(46,155,240,.16) 0, transparent 40%),
+                     radial-gradient(circle at 86% 6%, rgba(46,155,240,.12) 0, transparent 36%),
+                     radial-gradient(circle at 50% 120%, rgba(46,155,240,.14) 0, transparent 50%);
+    overflow-x:hidden;
+    line-height:1.55;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,.display{font-family:'Fredoka',sans-serif;line-height:1.02;letter-spacing:-.5px}
+  a{color:inherit}
+  img{max-width:100%}
+
+  /* ---------- scattered image background ---------- */
+  #sky-faces{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .floater{position:absolute;border-radius:18px;overflow:hidden;border:2px solid var(--line);
+    background:var(--panel);opacity:.22;pointer-events:auto;cursor:pointer;
+    animation:bob var(--dur,7s) ease-in-out infinite;will-change:transform}
+  .floater:hover{opacity:.9;box-shadow:var(--glow)}
+  .floater img{width:100%;height:100%;object-fit:cover;display:block}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(var(--r,-6deg))}50%{transform:translateY(-22px) rotate(calc(var(--r,-6deg) * -1))}}
+  .pop{animation:popjoy .5s cubic-bezier(.3,1.6,.5,1)}
+  @keyframes popjoy{0%{transform:scale(1)}40%{transform:scale(1.4) rotate(10deg)}100%{transform:scale(1)}}
+  .heart{position:fixed;z-index:60;pointer-events:none;font-size:22px;animation:floatup 1s ease-out forwards}
+  @keyframes floatup{0%{transform:translateY(0) scale(.6);opacity:1}100%{transform:translateY(-90px) scale(1.2);opacity:0}}
+
+  /* ---------- sticker frame (real art) ---------- */
+  .sticker{background:var(--panel);border:3px solid var(--blue);border-radius:24px;overflow:hidden;
+    display:grid;place-items:center}
+  .sticker img{width:100%;height:100%;object-fit:contain;display:block;background:#fff}
+
+  /* ---------- nav ---------- */
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(4,7,14,.72);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:'Fredoka';font-weight:700;font-size:1.35rem;color:var(--blue);text-decoration:none}
+  .brand .logo{width:40px;height:40px;border-radius:11px;overflow:hidden;border:2px solid var(--blue);flex:0 0 40px}
+  .brand .logo img{width:100%;height:100%;object-fit:cover;display:block}
+  .nav-links{display:flex;align-items:center;gap:26px}
+  .nav-links a{text-decoration:none;font-weight:800;color:var(--text);opacity:.75;transition:opacity .15s,color .15s}
+  .nav-links a:hover{opacity:1;color:var(--blue-bright)}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:'Fredoka';font-weight:600;
+    border:2px solid var(--blue);border-radius:999px;padding:12px 22px;text-decoration:none;
+    background:transparent;color:var(--blue-bright);box-shadow:var(--shadow-sm);
+    transition:transform .12s ease, box-shadow .12s ease, background .12s;cursor:pointer;font-size:1rem}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(46,155,240,.28)}
+  .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(46,155,240,.28)}
+  .btn:focus-visible{outline:none;box-shadow:var(--ring),var(--shadow-sm)}
+  .btn.blue{background:var(--blue);color:var(--black);border-color:var(--blue)}
+  .btn.blue:hover{background:var(--blue-bright)}
+  .btn.ghost{background:var(--panel);color:var(--blue-bright)}
+  .btn.sm{padding:9px 16px;font-size:.92rem}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;z-index:1;text-align:center;padding:72px 0 60px}
+  .hero-art{width:236px;height:236px;margin:0 auto 14px;cursor:pointer}
+  .hero-art .sticker{width:100%;height:100%;transform:rotate(0);box-shadow:var(--shadow),var(--glow);transition:transform .16s ease}
+  .hero-art .sticker img{object-fit:cover}
+  .hero-art:hover .sticker{transform:scale(1.04)}
+  .eyebrow{display:inline-block;font-family:'Fredoka';font-weight:600;letter-spacing:.5px;
+    background:var(--panel);border:2px solid var(--blue);border-radius:999px;padding:6px 16px;
+    font-size:.85rem;box-shadow:var(--shadow-sm);margin-bottom:18px;color:var(--blue-bright)}
+  .hero h1{font-size:clamp(2.6rem,8vw,5.4rem);font-weight:700;color:var(--text)}
+  .hero h1 .accent{color:var(--blue)}
+  .hero p.lead{max-width:620px;margin:20px auto 0;font-size:1.22rem;font-weight:600;color:var(--muted)}
+  .hero .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+  .ticker-pill{margin-top:30px;display:inline-flex;gap:10px;align-items:center;font-weight:800;
+    background:var(--panel);border:2px dashed var(--blue);border-radius:16px;padding:10px 18px;color:var(--blue-bright)}
+  .ticker-pill b{font-family:'Space Mono';color:var(--text)}
+
+  /* ---------- sections ---------- */
+  section{position:relative;z-index:1;padding:64px 0}
+  .sec-head{text-align:center;margin-bottom:42px}
+  .sec-head h2{font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--text)}
+  .sec-head h2 .accent{color:var(--blue)}
+  .sec-head p{margin-top:12px;font-size:1.1rem;font-weight:600;color:var(--muted);max-width:600px;margin-left:auto;margin-right:auto}
+
+  /* gallery */
+  .gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+  .gallery .sticker{aspect-ratio:1;cursor:pointer;box-shadow:var(--shadow-sm);transition:transform .16s ease,box-shadow .16s ease}
+  .gallery .sticker:nth-child(odd){transform:rotate(-3deg)}
+  .gallery .sticker:nth-child(even){transform:rotate(3deg)}
+  .gallery .sticker:hover{transform:rotate(0) scale(1.07);box-shadow:var(--shadow),var(--glow)}
+
+  /* story */
+  .story{background:var(--panel);border:2px solid var(--line);border-radius:30px;box-shadow:var(--shadow-sm);
+    padding:46px;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+  .story h2{font-size:2.1rem;color:var(--text);margin-top:14px}
+  .story p{font-size:1.08rem;font-weight:600;margin-top:14px;color:var(--muted)}
+  .story p strong,.story p em{color:var(--text);font-style:normal}
+  .story .credit{display:inline-flex;align-items:center;gap:10px;margin-top:24px;font-family:'Fredoka';
+    font-weight:600;text-decoration:none;background:var(--panel-2);border:2px solid var(--blue);
+    border-radius:999px;padding:10px 18px;box-shadow:var(--shadow-sm);color:var(--blue-bright);transition:transform .12s}
+  .story .credit:hover{transform:translate(-2px,-2px)}
+  .story-faces{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;place-items:center}
+  .story-faces .floater{position:relative;width:90px;height:90px;opacity:1;border-color:var(--blue);
+    animation:bob 6s ease-in-out infinite}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:34px}
+  .stat{border:2px solid var(--blue);border-radius:20px;padding:22px 14px;text-align:center;box-shadow:var(--shadow-sm)}
+  .stat:nth-child(odd){background:var(--blue);color:var(--black)}
+  .stat:nth-child(even){background:var(--panel);color:var(--blue-bright)}
+  .stat .n{font-family:'Fredoka';font-weight:700;font-size:2.1rem;line-height:1}
+  .stat .l{font-weight:800;font-size:.86rem;margin-top:6px;opacity:.92}
+
+  /* features */
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .feat{background:var(--panel);border:2px solid var(--line);border-radius:24px;padding:26px;
+    box-shadow:var(--shadow-sm);transition:transform .14s ease,border-color .14s}
+  .feat:hover{transform:translateY(-6px) rotate(-1deg);border-color:var(--blue)}
+  .feat .ico{width:60px;height:60px;border-radius:15px;overflow:hidden;border:2px solid var(--blue);margin-bottom:14px}
+  .feat .ico img{width:100%;height:100%;object-fit:cover;display:block}
+  .feat h3{font-size:1.28rem;font-weight:600;color:var(--text)}
+  .feat p{font-weight:600;margin-top:8px;color:var(--muted);font-size:.98rem}
+
+  /* links hub */
+  .links-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .link-card{display:flex;align-items:center;gap:14px;background:var(--panel);border:2px solid var(--line);
+    border-radius:20px;padding:18px 22px;text-decoration:none;box-shadow:var(--shadow-sm);
+    transition:transform .12s ease, box-shadow .12s ease, border-color .12s}
+  .link-card:hover{transform:translate(-3px,-3px);box-shadow:var(--shadow);border-color:var(--blue)}
+  .link-card .lc-bar{width:6px;align-self:stretch;border-radius:6px;background:var(--blue);flex:0 0 6px}
+  .link-card .lc-t{font-family:'Fredoka';font-weight:600;font-size:1.1rem;color:var(--text)}
+  .link-card .lc-s{font-weight:700;font-size:.85rem;color:var(--muted)}
+  .link-card .lc-go{margin-left:auto;font-weight:800;color:var(--blue);font-size:1.3rem}
+
+  /* buy / contract */
+  .buy{background:var(--panel);border:3px solid var(--blue);border-radius:34px;box-shadow:var(--glow);
+    padding:54px 40px;text-align:center;position:relative;overflow:hidden}
+  .buy::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% -10%,rgba(46,155,240,.25),transparent 60%);pointer-events:none}
+  .buy h2{color:var(--text);font-size:clamp(2rem,5vw,3.1rem);position:relative}
+  .buy h2 .accent{color:var(--blue)}
+  .buy p{font-weight:700;color:var(--muted);margin-top:10px;font-size:1.1rem;position:relative}
+  .ca-box{position:relative;display:flex;align-items:center;gap:12px;max-width:640px;margin:30px auto 0;
+    background:var(--black);border:2px dashed var(--blue);border-radius:16px;
+    padding:14px 16px;flex-wrap:wrap;justify-content:center}
+  .ca-box code{font-family:'Space Mono';font-size:.92rem;word-break:break-all;color:var(--blue-bright);text-align:left;flex:1;min-width:200px}
+  #copyBtn{white-space:nowrap}
+  .buy .cta-row{position:relative;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+  .buy .chain{position:relative;margin-top:22px;font-weight:800;color:var(--muted);font-size:.9rem}
+
+  /* footer */
+  footer{position:relative;z-index:1;text-align:center;padding:54px 0 70px;font-weight:700;color:var(--muted)}
+  footer .brand{justify-content:center;margin-bottom:14px}
+  footer .disclaimer{max-width:680px;margin:18px auto 0;font-size:.82rem;font-weight:600;opacity:.7;line-height:1.5}
+  footer .foot-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+  footer .foot-links a{text-decoration:none;color:var(--blue-bright);font-weight:800}
+
+  /* toast */
+  #toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(120%);
+    background:var(--panel);color:var(--blue-bright);border:2px solid var(--blue);font-weight:800;
+    padding:14px 24px;border-radius:14px;z-index:80;transition:transform .3s cubic-bezier(.3,1.4,.5,1);box-shadow:var(--glow)}
+  #toast.show{transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:860px){
+    .gallery{grid-template-columns:repeat(3,1fr)}
+    .story{grid-template-columns:1fr;padding:32px}
+    .story-faces{grid-template-columns:repeat(4,1fr)}
+    .feat-grid{grid-template-columns:1fr 1fr}
+    .stat-row{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:620px){
+    .nav-links{display:none}
+    .gallery{grid-template-columns:repeat(2,1fr)}
+    .feat-grid,.links-grid{grid-template-columns:1fr}
+    .floater{display:none}
+    .floater.keep{display:block}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto}
+    .btn:hover,.feat:hover,.link-card:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== scattered image background (built from your art in JS) ===== -->
+<div id="sky-faces" aria-hidden="true"></div>
+
+<!-- ===== nav ===== -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand"><span class="logo" id="navLogo"></span>JOOBI</a>
+    <nav class="nav-links">
+      <a href="#faces">Faces</a>
+      <a href="#story">Story</a>
+      <a href="#features">Features</a>
+      <a href="#get">Get the emoji</a>
+      <a href="#buy">Buy $JOOBI</a>
+    </nav>
+    <a href="#buy" class="btn sm blue">Buy now</a>
+  </div>
+</header>
+
+<!-- ===== hero ===== -->
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-art" id="heroStar" title="poke me!">
+      <div class="sticker"><img src="https://i.imgur.com/hCkIHSV.jpeg" alt="JOOBI blue emoji" /></div>
+    </div>
+    <span class="eyebrow">★ Hand-drawn since 2009 · now on TON ★</span>
+    <h1>The little blue faces<br>that <span class="accent">broke the internet</span></h1>
+    <p class="lead">You've sent them a thousand times. 187 emoji, one artist, fifteen years of pure internet joy — and now a token to match the legend.</p>
+    <div class="cta-row">
+      <a href="#buy" class="btn blue">Buy $JOOBI</a>
+      <a href="https://t.me/addstickers/bluemojiesJoobi" target="_blank" rel="noopener" class="btn ghost">Get the stickers</a>
+    </div>
+    <div class="ticker-pill">Ticker: <b>$JOOBI</b> · Chain: <b>TON</b></div>
+  </div>
+</section>
+
+<!-- ===== gallery (real art) ===== -->
+<section id="faces">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Meet a few</span>
+      <h2>A taste of the <span class="accent">187</span></h2>
+      <p>Every single one hand-drawn. Tap a face to make it pop.</p>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<!-- ===== story ===== -->
+<section id="story">
+  <div class="wrap">
+    <div class="story">
+      <div>
+        <span class="eyebrow">The real story</span>
+        <h2>One artist. Fifteen years. Zero hype machine.</h2>
+        <p>Telegram was never just a messaging app — it's where memes are born and stickers become a language. Few icons run deeper than JOOBI.</p>
+        <p>It started in 2009 with 40 hand-drawn faces on DeviantArt. No team, no funding, no marketing. Just <strong>Tanya Mau</strong> and the discipline to keep going.</p>
+        <p>Fifteen years later it's hundreds of emoji, sticker packs used everywhere, and official apps — and it's <em>still</em> hand-drawn by the same person who started it all.</p>
+        <a class="credit" href="https://x.com/lazymau" target="_blank" rel="noopener">Show Tanya some love →</a>
+      </div>
+      <div class="story-faces" id="storyFaces"></div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="n">187</div><div class="l">unique emoji</div></div>
+      <div class="stat"><div class="n">~80%</div><div class="l">animated &amp; interactive</div></div>
+      <div class="stat"><div class="n">100+</div><div class="l">with skin tones</div></div>
+      <div class="stat"><div class="n">2009</div><div class="l">year it all began</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== features ===== -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What's in the box</span>
+      <h2>More than a <span class="accent">face</span></h2>
+      <p>Tap one or send it to a friend — almost every emoji comes alive with its own animation and personality.</p>
+    </div>
+    <div class="feat-grid" id="featGrid"></div>
+  </div>
+</section>
+
+<!-- ===== get the emoji (links hub) ===== -->
+<section id="get">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Grab them everywhere</span>
+      <h2>Get the <span class="accent">emoji</span></h2>
+      <p>Official apps and packs across iMessage, WhatsApp and Telegram.</p>
+    </div>
+    <div class="links-grid">
+      <a class="link-card" href="https://apps.apple.com/vn/app/blue-emoji-imessage-stickers/id1669720710?l=vi" target="_blank" rel="noopener">
+        <span class="lc-bar"></span>
+        <span><span class="lc-t">Blue Emoji for iMessage</span><br><span class="lc-s">App Store</span></span>
+        <span class="lc-go">→</span>
+      </a>
+      <a class="link-card" href="https://apps.apple.com/vn/app/bluemoji/id6752447047?l=vi" target="_blank" rel="noopener">
+        <span class="lc-bar"></span>
+        <span><span class="lc-t">Create your own Bluemoji</span><br><span class="lc-s">App Store · emoji editor</span></span>
+        <span class="lc-go">→</span>
+      </a>
+      <a class="link-card" href="https://t.me/addstickers/bluemojiesJoobi" target="_blank" rel="noopener">
+        <span class="lc-bar"></span>
+        <span><span class="lc-t">Telegram sticker pack</span><br><span class="lc-s">t.me/addstickers</span></span>
+        <span class="lc-go">→</span>
+      </a>
+      <a class="link-card" href="https://t.me/addemoji/bluesmiley_by_TgEmojiBot" target="_blank" rel="noopener">
+        <span class="lc-bar"></span>
+        <span><span class="lc-t">Telegram emoji pack</span><br><span class="lc-s">t.me/addemoji</span></span>
+        <span class="lc-go">→</span>
+      </a>
+      <a class="link-card" href="https://bluemoji.io/" target="_blank" rel="noopener">
+        <span class="lc-bar"></span>
+        <span><span class="lc-t">Bluemoji keyboard</span><br><span class="lc-s">use them anywhere</span></span>
+        <span class="lc-go">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== buy / contract ===== -->
+<section id="buy">
+  <div class="wrap">
+    <div class="buy">
+      <span class="eyebrow">The token</span>
+      <h2>Buy <span class="accent">$JOOBI</span> on TON</h2>
+      <p>Back the longest-running blue faces on the internet. Copy the contract and grab some.</p>
+      <div class="ca-box">
+        <code id="caText">EQB5jqHoxZ8aiZdznfVb4ARrr7sBSEnTdZXmKDNu5TOIJiaL</code>
+        <button class="btn blue" id="copyBtn">Copy CA</button>
+      </div>
+      <div class="cta-row">
+        <a class="btn blue" href="https://dedust.io/swap/TON/EQB5jqHoxZ8aiZdznfVb4ARrr7sBSEnTdZXmKDNu5TOIJiaL" target="_blank" rel="noopener">Buy on DeDust</a>
+        <a class="btn ghost" href="https://tonviewer.com/EQB5jqHoxZ8aiZdznfVb4ARrr7sBSEnTdZXmKDNu5TOIJiaL" target="_blank" rel="noopener">View on Tonviewer</a>
+      </div>
+      <div class="chain">TON Ecosystem · Pair: JOOBI / TON</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== footer ===== -->
+<footer>
+  <div class="wrap">
+    <a href="#top" class="brand"><span class="logo" id="footLogo"></span>JOOBI</a>
+    <div>Born 2009 · still hand-drawn · powered by the Telegram community</div>
+    <div class="foot-links">
+      <a href="https://bluemoji.io/" target="_blank" rel="noopener">Website</a>
+      <a href="https://x.com/lazymau" target="_blank" rel="noopener">Artist</a>
+      <a href="https://t.me/addstickers/bluemojiesJoobi" target="_blank" rel="noopener">Telegram</a>
+      <a href="#buy">Buy</a>
+    </div>
+    <p class="disclaimer">$JOOBI is a community meme token. The Bluemoji / JOOBI artwork is created by Tanya Mau. Crypto is volatile and high-risk — nothing here is financial advice. Always verify the contract address yourself and do your own research before buying.</p>
+  </div>
+</footer>
+
+<div id="toast">Copied!</div>
+
+<script>
+/* ---------------------------------------------------------------
+   All faces use your real art. Add or swap URLs in this one list
+   and they propagate to the background, gallery, story and features.
+----------------------------------------------------------------*/
+const artImages=[
+  'https://i.imgur.com/hCkIHSV.jpeg',
+  'https://i.imgur.com/zuHpSdX.jpeg',
+  'https://i.imgur.com/SdzH0na.jpeg',
+  'https://i.imgur.com/MlEDMVk.jpeg',
+  'https://i.imgur.com/oFQ8njZ.jpeg'
+];
+const HERO = artImages[0];
+const rand = (a,b)=>a+Math.random()*(b-a);
+const pick = i => artImages[i % artImages.length];
+
+/* logos */
+function logoMarkup(){return `<img src="${HERO}" alt="JOOBI">`;}
+document.getElementById('navLogo').innerHTML = logoMarkup();
+document.getElementById('footLogo').innerHTML = logoMarkup();
+
+/* poke reaction — blue hearts only */
+function joy(el){
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  const r = el.getBoundingClientRect();
+  for(let i=0;i<5;i++){
+    const h=document.createElement('div'); h.className='heart'; h.textContent='💙';
+    h.style.left=(r.left+rand(0,r.width))+'px';
+    h.style.top=(r.top+rand(0,r.height*.5))+'px';
+    h.style.animationDelay=(i*40)+'ms';
+    document.body.appendChild(h); setTimeout(()=>h.remove(),1100);
+  }
+}
+document.getElementById('heroStar').addEventListener('click',e=>joy(e.currentTarget));
+
+/* scattered image background */
+const sky = document.getElementById('sky-faces');
+const N = 13;
+for(let i=0;i<N;i++){
+  const f=document.createElement('div');
+  f.className='floater'+(i<3?' keep':'');
+  f.innerHTML=`<img src="${pick(i)}" alt="">`;
+  f.style.left=rand(2,90)+'vw';
+  f.style.top=rand(4,180)+'vh';
+  const size=rand(48,96); f.style.width=size+'px'; f.style.height=size+'px';
+  f.style.setProperty('--dur',rand(5,10)+'s');
+  f.style.setProperty('--r',rand(-12,12)+'deg');
+  f.style.animationDelay=rand(0,4)+'s';
+  f.addEventListener('click',e=>joy(e.currentTarget));
+  sky.appendChild(f);
+}
+
+/* gallery */
+const gal=document.getElementById('gallery');
+artImages.forEach((src,i)=>{
+  const d=document.createElement('div'); d.className='sticker';
+  d.innerHTML=`<img src="${src}" alt="JOOBI emoji ${i+1}" loading="lazy">`;
+  d.addEventListener('click',e=>joy(e.currentTarget));
+  gal.appendChild(d);
+});
+
+/* story faces */
+const sf=document.getElementById('storyFaces');
+for(let i=0;i<6;i++){
+  const f=document.createElement('div'); f.className='floater';
+  f.innerHTML=`<img src="${pick(i)}" alt="">`;
+  f.style.setProperty('--dur',rand(5,8)+'s');
+  f.style.setProperty('--r',rand(-10,10)+'deg');
+  f.style.animationDelay=(i*.25)+'s';
+  f.addEventListener('click',e=>joy(e.currentTarget));
+  sf.appendChild(f);
+}
+
+/* feature cards */
+const features=[
+  {h:'187 unique emoji', p:'A full cast of blue faces, each with its own mood and personality.'},
+  {h:'They come alive', p:'Nearly 80% have their own interactive animations and effects when you tap them.'},
+  {h:'Made for everyone', p:'Over 100 iconic hand-drawn emoji with multiple skin tones.'},
+  {h:'The emoji editor', p:'Mix and match eyes, mouths, hands, props and more to build your own.'},
+  {h:'Packs everywhere', p:'Custom sticker packs for iMessage, WhatsApp and Telegram.'},
+  {h:'Dedicated keyboard', p:'A Bluemoji keyboard so you can drop them into any conversation.'}
+];
+const fg=document.getElementById('featGrid');
+features.forEach((ft,i)=>{
+  const c=document.createElement('div'); c.className='feat';
+  c.innerHTML=`<div class="ico"><img src="${pick(i)}" alt=""></div><h3>${ft.h}</h3><p>${ft.p}</p>`;
+  fg.appendChild(c);
+});
+
+/* copy CA */
+const toast=document.getElementById('toast');
+function showToast(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1600);}
+document.getElementById('copyBtn').addEventListener('click',async()=>{
+  const ca=document.getElementById('caText').textContent.trim();
+  try{await navigator.clipboard.writeText(ca);}
+  catch(e){const t=document.createElement('textarea');t.value=ca;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();}
+  showToast('Contract copied!');
+});
+</script>
+</body>
+</html>
